@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class EventsController < ApplicationController
+  before_action :set_user, only: :index
   before_action :set_event, only: %i[edit update destroy]
 
   def index
-    @events = Event.where(user: current_user).order(date: :desc, time: :desc)
+    @events = Event.where(user: @user).order(date: :desc, time: :desc)
   end
 
   def new
@@ -43,6 +44,10 @@ private
 
   def event_params
     params.require(:event).permit(:date, :time, :description)
+  end
+
+  def set_user
+    @user = params[:user_id].present? ? User.find(params[:user_id]) : current_user
   end
 
   def set_event

@@ -27,11 +27,13 @@ class Session < ApplicationRecord
 
   belongs_to :user, optional: true
 
-  validates :email, :password, presence: { on: :create }
+  validates :email, :password, presence: { on: :create, if: -> { user.nil? } }
 
   before_create :set_user_from_credentials, if: -> { user.nil? }
   before_create :set_expires_at, if: -> { expires_at.nil? }
   before_create :set_token, if: -> { token.nil? }
+
+  scope :active, -> { where(arel_table[:expires_at].gt(Time.current)) }
 
 private
 

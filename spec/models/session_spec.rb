@@ -30,12 +30,14 @@ RSpec.describe Session, type: :model do
     should be_valid
   end
 
-  it 'is invalid without an email' do
+  it 'is invalid without an email and a user' do
+    subject.user = nil
     subject.email = nil
     should be_invalid
   end
 
-  it 'is invalid without a password' do
+  it 'is invalid without a password and a user' do
+    subject.user = nil
     subject.password = nil
     should be_invalid
   end

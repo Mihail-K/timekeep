@@ -28,12 +28,13 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe '#POST create' do
-    it 'creates a new user account' do
+    it 'creates a new user account and a new session' do
       expect do
         post :create, params: { user: attributes_for(:user) }
 
         expect(response).to have_http_status(:ok)
       end.to change { User.count }.by(1)
+        .and change { Session.count }.by(1)
     end
 
     it 'renders the form again when the user is invalid' do

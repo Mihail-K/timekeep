@@ -8,6 +8,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      @session = Session.create(user: @user)
+      session[:token] = @session.token
       head :ok
     else
       render 'new'

@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+class EventPolicy < ApplicationPolicy
+  def index?
+    true
+  end
+
+  def create?
+    current_user.present?
+  end
+
+  def update?
+    current_user.present? && current_user == record.user
+  end
+
+  def destroy?
+    current_user.present? && current_user == record.user
+  end
+
+  def permitted_attributes
+    %i[date time description]
+  end
+end

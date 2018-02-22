@@ -39,7 +39,7 @@ RSpec.describe SessionsController, type: :controller do
       expect do
         post :create, params: { session: { email: user.email, password: user.password } }
 
-        expect(response).to have_http_status :ok
+        expect(response).to redirect_to(events_url)
       end.to change { Session.count }.by(1)
     end
 

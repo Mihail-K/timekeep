@@ -4,30 +4,32 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[edit update destroy]
 
   def index
-    @events = Event.where(user: @user).order(date: :desc, time: :desc)
+    @events = policy_scope(Event).where(user: @user).order(date: :desc, time: :desc)
   end
 
   def new
     date   = Date.current.in_time_zone(current_user.time_zone)
     time   = Time.current.in_time_zone(current_user.time_zone).strftime('%R')
-    @event = Event.new(date: date, time: time)
+    @event = authorize(Event).new(date: date, time: time)
   end
 
   def create
-    @event = Event.new(event_params)
+    @event = Event.new(permitted_attributes(Event))
     @event.user = current_user
 
-    if @event.save
+    if authorize(@event).save
       redirect_to events_url
     else
       render 'new'
     end
   end
 
-  def edit; end
+  def edit
+    authorize(@event)
+  end
 
   def update
-    if @event.update(event_params)
+    if authorize(@event).update(permitted_attributes(Event))
       redirect_to events_url
     else
       render 'edit'
@@ -35,16 +37,11 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    @event.destroy
-
+    authorize(@event).destroy
     redirect_to events_url
   end
 
 private
-
-  def event_params
-    params.require(:event).permit(:date, :time, :description)
-  end
 
   def set_user
     @user = params[:user_id].present? ? User.find(params[:user_id]) : current_user

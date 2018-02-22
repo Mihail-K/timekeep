@@ -45,6 +45,7 @@ private
 
   def set_user
     @user = params[:user_id].present? ? User.find(params[:user_id]) : current_user
+    head(:not_found) if @user.nil?
   end
 
   def set_event

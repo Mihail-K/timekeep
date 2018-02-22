@@ -17,4 +17,4 @@
     </tr>
   <% end %>
 </table>
-<%= link_to('Link this page', events_url(user_id: @user&.id || @current_user.id), class: 'btn btn-link') %>
+<%= link_to('Link this page', events_url(user_id: @user.id), class: 'btn btn-link') %>

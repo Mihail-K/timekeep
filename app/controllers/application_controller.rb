@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  before_action :current_user
+  before_action :set_current_user
 
 protected
 
@@ -14,6 +14,10 @@ protected
   end
 
   def current_user
-    @current_user = current_session&.user
+    current_session&.user
+  end
+
+  def set_current_user
+    @current_user = current_user
   end
 end

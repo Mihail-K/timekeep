@@ -20,12 +20,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
-FactoryBot.define do
-  factory :event do
-    association :user, strategy: :build
+require 'rails_helper'
 
-    date { Date.current }
-    time '12:00'
-    description { Faker::Hipster.sentence }
-  end
+RSpec.describe EventsController, type: :controller do
 end

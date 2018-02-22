@@ -5,8 +5,9 @@
 #
 #  id          :uuid             not null, primary key
 #  user_id     :uuid             not null
-#  occurred_at :date             not null
-#  description :text
+#  date        :date             not null
+#  time        :string           not null
+#  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -33,8 +34,18 @@ RSpec.describe Event, type: :model do
     should be_invalid
   end
 
-  it 'is invalid without an occurrence timestamp' do
-    subject.occurred_at = nil
+  it 'is invalid without a date' do
+    subject.date = nil
+    should be_invalid
+  end
+
+  it 'is invalid without a time' do
+    subject.time = nil
+    should be_invalid
+  end
+
+  it 'is invalid without a description' do
+    subject.description = nil
     should be_invalid
   end
 end

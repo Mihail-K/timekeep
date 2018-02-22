@@ -1,0 +1,17 @@
+<%= form_for(@event) do |f| %>
+  <div class="form-row">
+    <div class="form-group col">
+      <label for="event_date">Date</label>
+      <%= f.date_field(:date, class: 'form-control') %>
+    </div>
+    <div class="form-group col">
+      <label for="event_time">Time</label>
+      <%= f.time_field(:time, class: 'form-control', value: @event.time) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="event_description">Description</label>
+    <%= f.text_area(:description, class: 'form-control', required: true) %>
+  </div>
+  <%= f.submit(@event.persisted? ? 'Save Changes' : 'Log Event', class: 'btn btn-primary') %>
+<% end %>

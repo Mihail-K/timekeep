@@ -1,0 +1,19 @@
+<table class="table table-striped">
+  <tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Description</th>
+    <th></th>
+  </tr>
+  <% @events.each do |event| %>
+    <tr>
+      <td><%= l(event.date, format: :long) %></td>
+      <td><%= l(event.time.to_time, format: :time) %></td>
+      <td><%= event.description %></td>
+      <td class="text-right">
+        <%= link_to('Edit', edit_event_url(event), class: 'btn btn-sm btn-link') %>
+        <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>
+      </td>
+    </tr>
+  <% end %>
+</table>

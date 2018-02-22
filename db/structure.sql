@@ -74,8 +74,9 @@ CREATE TABLE ar_internal_metadata (
 CREATE TABLE events (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL,
-    occurred_at date NOT NULL,
-    description text,
+    date date NOT NULL,
+    "time" character varying NOT NULL,
+    description text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

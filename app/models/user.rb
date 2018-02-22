@@ -21,4 +21,8 @@ class User < ApplicationRecord
   validates :first_name, :last_name, length: { maximum: 50 }
 
   has_secure_password
+
+  def time_zone
+    'America/Toronto'
+  end
 end

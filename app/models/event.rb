@@ -5,8 +5,9 @@
 #
 #  id          :uuid             not null, primary key
 #  user_id     :uuid             not null
-#  occurred_at :date             not null
-#  description :text
+#  date        :date             not null
+#  time        :string           not null
+#  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -22,6 +23,7 @@
 class Event < ApplicationRecord
   belongs_to :user
 
-  validates :occurred_at, presence: true
-  validates :description, length: { maximum: 1000 }
+  validates :date, presence: true, timeliness: { date: true }
+  validates :time, presence: true, timeliness: { time: true }
+  validates :description, length: { maximum: 1000 }, presence: true
 end

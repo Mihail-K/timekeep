@@ -12,6 +12,7 @@ gem 'sass-rails'
 gem 'turbolinks'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'uglifier'
+gem 'validates_timeliness'
 
 group :development do
   gem 'annotate'

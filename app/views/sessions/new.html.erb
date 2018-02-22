@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-lg-4 offset-lg-4">
+    <%= form_for(@session, url: session_path) do |f| %>
+      <div class="form-group">
+        <label for="session_email">Email</label>
+        <%= f.email_field(:email, class: 'form-control', required: true) %>
+      </div>
+      <div class="form-group">
+        <label for="session_password">Password</label>
+        <%= f.password_field(:password, class: 'form-control', required: true) %>
+      </div>
+      <%= f.submit('Login', class: 'btn btn-primary') %>
+    <% end %>
+  </div>
+</div>

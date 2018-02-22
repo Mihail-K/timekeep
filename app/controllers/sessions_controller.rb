@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 
     if @session.save
       session[:token] = @session.token
-      head :ok
+      redirect_to events_url
     else
       render 'new'
     end

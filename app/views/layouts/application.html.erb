@@ -9,6 +9,25 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="collapse navbar-collapse" id="navbar_nav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <%= link_to('My Events', events_url, class: 'nav-link') %>
+          </li>
+          <li class="nav-item">
+            <%= link_to('Log Event', new_event_url, class: 'nav-link') %>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <%=
+            link_to_if(@current_user, 'Log Out', session_url, class: 'btn btn-outline-secondary', method: 'DELETE') do
+              link_to('Sign In', new_session_url, class: 'btn btn-outline-secondary')
+            end
+          %>
+        </form>
+      </div>
+    </nav>
     <%= yield %>
   </body>
 </html>

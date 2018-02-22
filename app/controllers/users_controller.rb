@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     if @user.save
       @session = Session.create(user: @user)
       session[:token] = @session.token
-      head :ok
+      redirect_to events_url
     else
       render 'new'
     end

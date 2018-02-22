@@ -3,7 +3,7 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[edit update destroy]
 
   def index
-    @events = Event.where(user: current_user)
+    @events = Event.where(user: current_user).order(:date, :time)
   end
 
   def new

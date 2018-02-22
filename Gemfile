@@ -2,6 +2,7 @@
 source 'https://rubygems.org'
 
 gem 'awesome_print'
+gem 'bcrypt'
 gem 'bootstrap', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'pg'

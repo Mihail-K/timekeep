@@ -12,12 +12,14 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="collapse navbar-collapse" id="navbar_nav">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <%= link_to('My Events', events_url, class: 'nav-link') %>
-          </li>
-          <li class="nav-item">
-            <%= link_to('Log Event', new_event_url, class: 'nav-link') %>
-          </li>
+          <% if @current_user %>
+            <li class="nav-item">
+              <%= link_to('My Events', events_url, class: 'nav-link') %>
+            </li>
+            <li class="nav-item">
+              <%= link_to('Log Event', new_event_url, class: 'nav-link') %>
+            </li>
+          <% end %>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <%=

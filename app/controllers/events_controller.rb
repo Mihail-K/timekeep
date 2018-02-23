@@ -27,11 +27,13 @@ class EventsController < ApplicationController
 
   def edit
     authorize(@event)
+    @page = params[:page].presence
   end
 
   def update
     if authorize(@event).update(permitted_attributes(Event))
-      redirect_to user_events_url(current_user)
+      redirect_to user_events_url(current_user, page: params[:page].presence,
+                                                anchor: "event-#{@event.id}")
     else
       render 'edit'
     end

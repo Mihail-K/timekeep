@@ -1,4 +1,5 @@
 <%= form_for(@event) do |f| %>
+  <%= hidden_field_tag('page', @page) %>
   <div class="form-row">
     <div class="form-group col">
       <label for="event_date">Date</label>

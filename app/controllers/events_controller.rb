@@ -19,7 +19,7 @@ class EventsController < ApplicationController
     @event.user = current_user
 
     if authorize(@event).save
-      redirect_to events_url
+      redirect_to user_events_url(current_user)
     else
       render 'new'
     end
@@ -31,7 +31,7 @@ class EventsController < ApplicationController
 
   def update
     if authorize(@event).update(permitted_attributes(Event))
-      redirect_to events_url
+      redirect_to user_events_url(current_user)
     else
       render 'edit'
     end
@@ -39,7 +39,7 @@ class EventsController < ApplicationController
 
   def destroy
     authorize(@event).destroy
-    redirect_to events_url
+    redirect_to user_events_url(current_user)
   end
 
 private

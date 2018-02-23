@@ -14,7 +14,7 @@
         <ul class="navbar-nav mr-auto">
           <% if @current_user %>
             <li class="nav-item">
-              <%= link_to('My Events', events_url, class: 'nav-link') %>
+              <%= link_to('My Events', user_events_url(@current_user), class: 'nav-link') %>
             </li>
           <% end %>
           <% if policy(Event).create? %>

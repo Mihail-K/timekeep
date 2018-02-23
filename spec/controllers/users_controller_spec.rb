@@ -32,7 +32,7 @@ RSpec.describe UsersController, type: :controller do
       expect do
         post :create, params: { user: attributes_for(:user) }
 
-        expect(response).to redirect_to(events_url)
+        expect(response).to redirect_to(user_events_url(User.last))
       end.to change { User.count }.by(1)
         .and change { Session.count }.by(1)
     end

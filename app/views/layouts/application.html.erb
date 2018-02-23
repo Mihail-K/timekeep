@@ -16,6 +16,8 @@
             <li class="nav-item">
               <%= link_to('My Events', events_url, class: 'nav-link') %>
             </li>
+          <% end %>
+          <% if policy(Event).create? %>
             <li class="nav-item">
               <%= link_to('Log Event', new_event_url, class: 'nav-link') %>
             </li>

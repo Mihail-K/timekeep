@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class SessionsController < ApplicationController
+  before_action :redirect_when_signed_in
+
   def new
     @session = Session.new
   end
@@ -24,5 +26,9 @@ private
 
   def session_params
     params.require(:session).permit(:email, :password)
+  end
+
+  def redirect_when_signed_in
+    redirect_to user_events_url(current_user) if current_user.present?
   end
 end

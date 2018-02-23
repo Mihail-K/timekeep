@@ -19,7 +19,7 @@
         <td><%= event.description %></td>
         <td class="text-right">
           <% if policy(event).update? %>
-            <%= link_to('Edit', edit_event_url(event, date: @date, page: @events.current_page), class: 'btn btn-sm btn-link') %>
+            <%= link_to('Edit', edit_event_url(event, page: @events.current_page), class: 'btn btn-sm btn-link') %>
           <% end %>
           <% if policy(event).destroy? %>
             <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>

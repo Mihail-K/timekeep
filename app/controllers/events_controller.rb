@@ -9,8 +9,8 @@ class EventsController < ApplicationController
   end
 
   def new
-    date   = Date.current.in_time_zone(current_user.time_zone)
-    time   = Time.current.in_time_zone(current_user.time_zone).strftime('%R')
+    date   = Date.current
+    time   = Time.current.strftime('%R')
     @event = authorize(Event).new(date: date, time: time)
   end
 

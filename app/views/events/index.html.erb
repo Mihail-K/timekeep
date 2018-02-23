@@ -1,24 +1,31 @@
-<table class="table table-striped">
-  <tr>
-    <th>Date</th>
-    <th>Time</th>
-    <th>Description</th>
-    <th></th>
-  </tr>
-  <% @events.each do |event| %>
+<div class="row">
+  <table class="table table-striped">
     <tr>
-      <td><%= l(event.date, format: :long) %></td>
-      <td><%= l(event.time.to_time, format: :time) %></td>
-      <td><%= event.description %></td>
-      <td class="text-right">
-        <% if policy(event).update? %>
-          <%= link_to('Edit', edit_event_url(event), class: 'btn btn-sm btn-link') %>
-        <% end %>
-        <% if policy(event).destroy? %>
-          <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>
-        <% end %>
-      </td>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Description</th>
+      <th></th>
     </tr>
-  <% end %>
-</table>
+    <% @events.each do |event| %>
+      <tr>
+        <td><%= l(event.date, format: :long) %></td>
+        <td><%= l(event.time.to_time, format: :time) %></td>
+        <td><%= event.description %></td>
+        <td class="text-right">
+          <% if policy(event).update? %>
+            <%= link_to('Edit', edit_event_url(event), class: 'btn btn-sm btn-link') %>
+          <% end %>
+          <% if policy(event).destroy? %>
+            <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<div class="row justify-content-center">
+  <div class="col-sm-auto">
+    <%= paginate(@events, theme: 'twitter-bootstrap-4') %>
+  </div>
+</div>
 <%= link_to('Link this page', events_url(user_id: @user.id), class: 'btn btn-link') %>

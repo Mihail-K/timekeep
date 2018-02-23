@@ -1,6 +1,6 @@
 <div class="row">
   <%= form_tag(nil, method: 'GET', class: 'form-inline col mt-2') do %>
-    <%= date_field_tag(:date, @events.where_values_hash['date'] || Date.current, class: 'form-control mb-2 mr-sm-2') %>
+    <%= date_field_tag(:date, @date, class: 'form-control mb-2 mr-sm-2') %>
     <%= submit_tag('Filter', class: 'btn btn-outline-secondary mb-2') %>
   <% end %>
 </div>
@@ -19,7 +19,7 @@
         <td><%= event.description %></td>
         <td class="text-right">
           <% if policy(event).update? %>
-            <%= link_to('Edit', edit_event_url(event, page: @events.current_page), class: 'btn btn-sm btn-link') %>
+            <%= link_to('Edit', edit_event_url(event, date: @date, page: @events.current_page), class: 'btn btn-sm btn-link') %>
           <% end %>
           <% if policy(event).destroy? %>
             <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>

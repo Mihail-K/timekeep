@@ -5,6 +5,7 @@ class EventsController < ApplicationController
 
   def index
     @events = policy_scope(Event).includes(:user).where(user: @user).order(date: :desc, time: :desc)
+    @events = @events.where(date: params[:date]) if params[:date].present?
     @events = @events.page(params[:page]).per(params[:count])
   end
 

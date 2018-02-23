@@ -1,4 +1,10 @@
 <div class="row">
+  <%= form_tag(nil, method: 'GET', class: 'form-inline col mt-2') do %>
+    <%= date_field_tag(:date, @events.where_values_hash['date'] || Date.current, class: 'form-control mb-2 mr-sm-2') %>
+    <%= submit_tag('Filter', class: 'btn btn-outline-secondary mb-2') %>
+  <% end %>
+</div>
+<div class="row">
   <table class="table table-striped">
     <tr>
       <th>Date</th>

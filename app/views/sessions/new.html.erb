@@ -10,6 +10,7 @@
         <%= f.password_field(:password, class: 'form-control', required: true) %>
       </div>
       <%= f.submit('Login', class: 'btn btn-primary') %>
+      <%= link_to('Create Account', new_user_url, class: 'btn btn-link') %>
     <% end %>
   </div>
 </div>

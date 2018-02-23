@@ -12,7 +12,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="collapse navbar-collapse" id="navbar_nav">
         <ul class="navbar-nav mr-auto">
-          <% if policy(Event).index? %>
+          <% if current_user %>
             <li class="nav-item">
               <%= link_to('My Events', user_events_url(current_user), class: 'nav-link') %>
             </li>

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class SessionsController < ApplicationController
-  before_action :redirect_when_signed_in
+  before_action :redirect_when_signed_in, only: :new
 
   def new
     @session = Session.new

@@ -30,6 +30,6 @@ class Event < ApplicationRecord
 
   validates :date, presence: true, timeliness: { date: true }
   validates :start_time, presence: true, timeliness: { time: true }
-  validates :end_time, timeliness: { allow_nil: true, time: true }
+  validates :end_time, timeliness: { allow_blank: true, time: true }
   validates :description, length: { maximum: 1000 }, presence: true
 end

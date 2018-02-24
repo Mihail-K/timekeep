@@ -26,10 +26,26 @@
 class Event < ApplicationRecord
   include SoftDeletable
 
+  attribute :ends_previous, :boolean
+
   belongs_to :user
 
   validates :date, presence: true, timeliness: { date: true }
   validates :start_time, presence: true, timeliness: { time: true }
   validates :end_time, timeliness: { allow_blank: true, time: true }
   validates :description, length: { maximum: 1000 }, presence: true
+
+  after_create :set_end_time_on_previous_event, if: :ends_previous?
+
+private
+
+  def set_end_time_on_previous_event
+    previous_event&.update!(end_time: start_time)
+  end
+
+  def previous_event
+    Event.where(user: user, date: date, end_time: [nil, ''])
+      .where(Event.arel_table[:start_time].lt(start_time))
+      .order(start_time: :desc).first
+  end
 end

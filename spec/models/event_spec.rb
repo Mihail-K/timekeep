@@ -51,4 +51,36 @@ RSpec.describe Event, type: :model do
     subject.description = nil
     should be_invalid
   end
+
+  describe '.previous_event' do
+    let(:event) { create(:event) }
+    let(:previous) { create(:event, user: event.user, date: event.date, start_time: '11:00') }
+
+    subject { event.send(:previous_event) }
+
+    it 'returns the previous event from the same user, on the same date' do
+      should eq(previous)
+    end
+
+    it "doesn't return events owned by a different user" do
+      previous.update(user: create(:user))
+      should_not eq(previous)
+    end
+
+    it "doesn't return events on a different date" do
+      previous.update(date: event.date - 1.day)
+      should_not eq(previous)
+    end
+
+    it "doesn't return events that are after the current one" do
+      previous.update(start_time: '12:30')
+      should_not eq(previous)
+    end
+  end
+
+  it 'sets the end time on the previous event when the ends-previous flag is set' do
+    subject.ends_previous = true
+    previous = create(:event, user: subject.user, date: subject.date, start_time: '11:00')
+    expect { subject.save }.to change { previous.reload.end_time }.to(subject.start_time)
+  end
 end

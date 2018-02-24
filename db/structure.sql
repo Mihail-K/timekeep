@@ -78,7 +78,9 @@ CREATE TABLE events (
     "time" character varying NOT NULL,
     description text NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    deleted_at timestamp without time zone
 );
 
 
@@ -102,6 +104,15 @@ CREATE TABLE sessions (
     expires_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE tests (
+    datetime timestamp with time zone
 );
 
 
@@ -221,6 +232,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180222045129'),
 ('20180222045321'),
 ('20180222052324'),
-('20180222055324');
+('20180222055324'),
+('20180224021819');
 
 

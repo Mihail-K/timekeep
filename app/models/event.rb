@@ -10,6 +10,8 @@
 #  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  deleted     :boolean          default(FALSE), not null
+#  deleted_at  :datetime
 #
 # Indexes
 #
@@ -21,6 +23,8 @@
 #
 
 class Event < ApplicationRecord
+  include SoftDeletable
+
   belongs_to :user
 
   validates :date, presence: true, timeliness: { date: true }

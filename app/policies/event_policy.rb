@@ -19,4 +19,10 @@ class EventPolicy < ApplicationPolicy
   def permitted_attributes
     %i[date time description]
   end
+
+  class Scope < Scope
+    def resolve
+      scope.not_deleted
+    end
+  end
 end

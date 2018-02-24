@@ -7,6 +7,20 @@ RSpec.describe EventPolicy do
 
   subject { described_class }
 
+  permissions '.scope' do
+    let(:user) { create(:user) }
+    let(:event) { create(:event, user: user) }
+
+    it 'includes events by default' do
+      expect(Pundit.policy_scope(user, Event)).to include(event)
+    end
+
+    it "doesn't include deleted events" do
+      event.destroy
+      expect(Pundit.policy_scope(user, Event)).not_to include(event)
+    end
+  end
+
   permissions :create? do
     it "doesn't allow guests to create events" do
       should_not permit(nil, Event)

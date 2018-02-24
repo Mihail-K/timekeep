@@ -1,6 +1,13 @@
 <div class="row">
   <%= form_tag(nil, method: 'GET', class: 'form-inline col mt-2') do %>
-    <%= date_field_tag(:date, @date, class: 'form-control mb-2 mr-sm-2') %>
+    <div class="input-group mb-2 mr-sm-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text small pt-0 pb-0">
+          <i class="material-icons md-18">date_range</i>
+        </span>
+      </div>
+      <%= date_field_tag(:date, @date, class: 'form-control') %>
+    </div>
     <%= submit_tag('Filter', class: 'btn btn-outline-secondary mb-2') %>
   <% end %>
 </div>

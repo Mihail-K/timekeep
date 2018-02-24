@@ -17,7 +17,7 @@ class EventPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    %i[date time description]
+    %i[date start_time end_time description]
   end
 
   class Scope < Scope

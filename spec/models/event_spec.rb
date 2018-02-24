@@ -6,12 +6,13 @@
 #  id          :uuid             not null, primary key
 #  user_id     :uuid             not null
 #  date        :date             not null
-#  time        :string           not null
+#  start_time  :string           not null
 #  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  deleted     :boolean          default(FALSE), not null
 #  deleted_at  :datetime
+#  end_time    :string
 #
 # Indexes
 #
@@ -41,8 +42,8 @@ RSpec.describe Event, type: :model do
     should be_invalid
   end
 
-  it 'is invalid without a time' do
-    subject.time = nil
+  it 'is invalid without a start time' do
+    subject.start_time = nil
     should be_invalid
   end
 

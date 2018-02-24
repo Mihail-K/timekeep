@@ -6,12 +6,13 @@
 #  id          :uuid             not null, primary key
 #  user_id     :uuid             not null
 #  date        :date             not null
-#  time        :string           not null
+#  start_time  :string           not null
 #  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  deleted     :boolean          default(FALSE), not null
 #  deleted_at  :datetime
+#  end_time    :string
 #
 # Indexes
 #
@@ -27,7 +28,7 @@ FactoryBot.define do
     association :user, strategy: :build
 
     date { Date.current }
-    time '12:00'
+    start_time '12:00'
     description { Faker::Hipster.sentence }
   end
 end

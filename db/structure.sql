@@ -75,12 +75,13 @@ CREATE TABLE events (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL,
     date date NOT NULL,
-    "time" character varying NOT NULL,
+    start_time character varying NOT NULL,
     description text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    end_time character varying
 );
 
 
@@ -233,6 +234,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180222045321'),
 ('20180222052324'),
 ('20180222055324'),
-('20180224021819');
+('20180224021819'),
+('20180224022708');
 
 

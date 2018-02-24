@@ -44,7 +44,7 @@ class EventsController < ApplicationController
 
   def destroy
     authorize(@event).destroy
-    redirect_to user_events_url(current_user)
+    redirect_to user_events_url(current_user, date: @event.date)
   end
 
 private

@@ -5,8 +5,8 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[edit update destroy]
 
   def index
-    @events = policy_scope(Event).includes(:user).order(date: :desc, start_time: :desc)
-    @events = @events.where(date: @date, user: @user)
+    @events = policy_scope(Event).includes(:user).where(date: @date, user: @user)
+    @events = @events.order({ date: :desc, start_time: :desc }, 'events.end_time DESC NULLS LAST')
     @events = @events.page(params[:page]).per(params[:count])
   end
 

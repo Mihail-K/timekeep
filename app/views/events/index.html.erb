@@ -24,7 +24,7 @@
       <tr id="event-<%= event.id %>">
         <td><%= l(event.date, format: :long) %></td>
         <td><%= l(event.start_time.to_time, format: :time) %></td>
-        <td><%= event.end_time && l(event.end_time.to_time, format: :time) %></td>
+        <td><%= event.end_time.presence && l(event.end_time.to_time, format: :time) %></td>
         <td><%= event.description %></td>
         <td class="text-right">
           <% if policy(event).update? %>

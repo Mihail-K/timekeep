@@ -40,6 +40,10 @@ class Event < ApplicationRecord
 
   after_create :set_end_time_on_previous_event, if: :ends_previous?
 
+  def self.longest_duration(limit: nil)
+    where.not(duration: nil).order(duration: :desc).limit(limit).pluck(:description, :duration).to_h
+  end
+
 private
 
   def set_duration

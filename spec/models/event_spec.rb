@@ -13,6 +13,7 @@
 #  deleted     :boolean          default(FALSE), not null
 #  deleted_at  :datetime
 #  end_time    :string
+#  duration    :integer
 #
 # Indexes
 #
@@ -47,9 +48,21 @@ RSpec.describe Event, type: :model do
     should be_invalid
   end
 
+  it 'is invalid when the end time is before the start time' do
+    subject.start_time = '11:00'
+    subject.end_time   = '10:30'
+    should be_invalid
+  end
+
   it 'is invalid without a description' do
     subject.description = nil
     should be_invalid
+  end
+
+  it 'sets the duration of the event when a start and end times are present' do
+    subject.start_time = '11:00'
+    subject.end_time   = '12:35'
+    expect { subject.save }.to change { subject.duration }.to(95)
   end
 
   describe '.previous_event' do

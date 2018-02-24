@@ -81,7 +81,8 @@ CREATE TABLE events (
     updated_at timestamp without time zone NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
     deleted_at timestamp without time zone,
-    end_time character varying
+    end_time character varying,
+    duration integer
 );
 
 
@@ -235,6 +236,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180222052324'),
 ('20180222055324'),
 ('20180224021819'),
-('20180224022708');
+('20180224022708'),
+('20180224050623');
 
 

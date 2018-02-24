@@ -13,6 +13,7 @@
 #  deleted     :boolean          default(FALSE), not null
 #  deleted_at  :datetime
 #  end_time    :string
+#  duration    :integer
 #
 # Indexes
 #
@@ -32,12 +33,21 @@ class Event < ApplicationRecord
 
   validates :date, presence: true, timeliness: { date: true }
   validates :start_time, presence: true, timeliness: { time: true }
-  validates :end_time, timeliness: { allow_blank: true, time: true }
+  validates :end_time, timeliness: { allow_blank: true, time: true, on_or_after: :start_time, if: :start_time? }
   validates :description, length: { maximum: 1000 }, presence: true
+
+  before_save :set_duration, if: -> { start_time_changed? || end_time_changed? }
 
   after_create :set_end_time_on_previous_event, if: :ends_previous?
 
 private
+
+  def set_duration
+    return if end_time.blank?
+    start  = Time.zone.parse("#{date} #{start_time}")
+    finish = Time.zone.parse("#{date} #{end_time}")
+    self.duration = (finish - start) / 1.minute
+  end
 
   def set_end_time_on_previous_event
     previous_event&.update!(end_time: start_time)

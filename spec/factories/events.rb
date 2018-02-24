@@ -13,6 +13,7 @@
 #  deleted     :boolean          default(FALSE), not null
 #  deleted_at  :datetime
 #  end_time    :string
+#  duration    :integer
 #
 # Indexes
 #

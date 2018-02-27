@@ -60,6 +60,19 @@ RSpec.describe EventsController, type: :controller do
     end
   end
 
+  describe '#PATCH close' do
+    let(:event) { create(:event, user: user) }
+
+    it 'sets the end time on the requested event' do
+      expect do
+        patch :close, params: { id: event.id }, session: { token: session.token }
+
+        params = { date: Date.current.iso8601, anchor: "event-#{event.id}" }
+        expect(response).to redirect_to(user_events_url(user, params))
+      end.to change { event.reload.end_time }
+    end
+  end
+
   describe '#DELETE destroy' do
     let!(:event) { create(:event, user: user) }
 

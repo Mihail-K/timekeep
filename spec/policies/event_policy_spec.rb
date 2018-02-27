@@ -45,6 +45,20 @@ RSpec.describe EventPolicy do
     end
   end
 
+  permissions :close? do
+    it "doesn't allow guests to close events" do
+      should_not permit(nil, event)
+    end
+
+    it 'allows users to close their own events' do
+      should permit(user, event)
+    end
+
+    it "doesn't allow users to close other events" do
+      should_not permit(User.new, event)
+    end
+  end
+
   permissions :destroy? do
     it "doesn't allow guests to edit events" do
       should_not permit(nil, event)

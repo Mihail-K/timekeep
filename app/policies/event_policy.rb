@@ -12,6 +12,10 @@ class EventPolicy < ApplicationPolicy
     current_user.present? && current_user == record.user
   end
 
+  def close?
+    update?
+  end
+
   def destroy?
     current_user.present? && current_user == record.user
   end

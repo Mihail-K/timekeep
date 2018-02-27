@@ -2,7 +2,7 @@
 class EventsController < ApplicationController
   before_action :set_user, only: :index
   before_action :set_date, only: :index
-  before_action :set_event, only: %i[edit update destroy]
+  before_action :set_event, only: %i[edit update close destroy]
 
   def index
     @events = policy_scope(Event).includes(:user).where(date: @date, user: @user)
@@ -40,6 +40,13 @@ class EventsController < ApplicationController
     else
       render 'edit'
     end
+  end
+
+  def close
+    authorize(@event).update(end_time: Time.current.strftime('%R'))
+    redirect_to user_events_url(current_user, date: @event.date,
+                                              page: params[:page].presence,
+                                              anchor: "event-#{@event.id}")
   end
 
   def destroy

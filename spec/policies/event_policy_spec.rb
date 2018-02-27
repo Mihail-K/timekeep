@@ -43,6 +43,11 @@ RSpec.describe EventPolicy do
     it "doesn't allow users to edit other events" do
       should_not permit(User.new, event)
     end
+
+    it "doesn't allow users to edit deleted events" do
+      event.deleted = true
+      should_not permit(user, event)
+    end
   end
 
   permissions :close? do
@@ -57,19 +62,29 @@ RSpec.describe EventPolicy do
     it "doesn't allow users to close other events" do
       should_not permit(User.new, event)
     end
+
+    it "doesn't allow users to close deleted events" do
+      event.deleted = true
+      should_not permit(user, event)
+    end
   end
 
   permissions :destroy? do
-    it "doesn't allow guests to edit events" do
+    it "doesn't allow guests to delete events" do
       should_not permit(nil, event)
     end
 
-    it 'allows users to edit their own events' do
+    it 'allows users to delete their own events' do
       should permit(user, event)
     end
 
-    it "doesn't allow users to edit other events" do
+    it "doesn't allow users to delete other events" do
       should_not permit(User.new, event)
+    end
+
+    it "doesn't allow users to delete deleted events" do
+      event.deleted = true
+      should_not permit(user, event)
     end
   end
 end

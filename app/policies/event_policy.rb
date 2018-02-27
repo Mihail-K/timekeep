@@ -9,6 +9,7 @@ class EventPolicy < ApplicationPolicy
   end
 
   def update?
+    return false if record.deleted?
     current_user.present? && current_user == record.user
   end
 
@@ -17,6 +18,7 @@ class EventPolicy < ApplicationPolicy
   end
 
   def destroy?
+    return false if record.deleted?
     current_user.present? && current_user == record.user
   end
 

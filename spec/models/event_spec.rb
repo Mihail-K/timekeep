@@ -3,17 +3,19 @@
 #
 # Table name: events
 #
-#  id          :uuid             not null, primary key
-#  user_id     :uuid             not null
-#  date        :date             not null
-#  start_time  :string           not null
-#  description :text             not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  deleted     :boolean          default(FALSE), not null
-#  deleted_at  :datetime
-#  end_time    :string
-#  duration    :integer
+#  id               :uuid             not null, primary key
+#  user_id          :uuid             not null
+#  date             :date             not null
+#  start_time       :string           not null
+#  description      :text             not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  deleted          :boolean          default(FALSE), not null
+#  deleted_at       :datetime
+#  end_time         :string
+#  duration         :integer
+#  html_description :text             not null
+#  text_description :text             not null
 #
 # Indexes
 #
@@ -63,6 +65,10 @@ RSpec.describe Event, type: :model do
     subject.start_time = '11:00'
     subject.end_time   = '12:35'
     expect { subject.save }.to change { subject.duration }.to(95)
+  end
+
+  it 'sets the HTML and text descriptions when saved' do
+    expect { subject.save }.to change { subject.html_description }.and change { subject.text_description }
   end
 
   describe '.previous_event' do

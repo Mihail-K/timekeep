@@ -3,17 +3,19 @@
 #
 # Table name: events
 #
-#  id          :uuid             not null, primary key
-#  user_id     :uuid             not null
-#  date        :date             not null
-#  start_time  :string           not null
-#  description :text             not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  deleted     :boolean          default(FALSE), not null
-#  deleted_at  :datetime
-#  end_time    :string
-#  duration    :integer
+#  id               :uuid             not null, primary key
+#  user_id          :uuid             not null
+#  date             :date             not null
+#  start_time       :string           not null
+#  description      :text             not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  deleted          :boolean          default(FALSE), not null
+#  deleted_at       :datetime
+#  end_time         :string
+#  duration         :integer
+#  html_description :text             not null
+#  text_description :text             not null
 #
 # Indexes
 #
@@ -37,6 +39,7 @@ class Event < ApplicationRecord
   validates :description, length: { maximum: 1000 }, presence: true
 
   before_save :set_duration, if: -> { start_time_changed? || end_time_changed? }
+  before_save :set_html_and_text_descriptions, if: :description_changed?
 
   after_create :set_end_time_on_previous_event, if: :ends_previous?
 
@@ -51,6 +54,12 @@ private
     start  = Time.zone.parse("#{date} #{start_time}")
     finish = Time.zone.parse("#{date} #{end_time}")
     self.duration = (finish - start) / 1.minute
+  end
+
+  def set_html_and_text_descriptions
+    markdown = MarkdownService.new(description)
+    self.html_description = markdown.render_html
+    self.text_description = markdown.render_text
   end
 
   def set_end_time_on_previous_event

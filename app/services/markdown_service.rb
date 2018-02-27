@@ -9,11 +9,11 @@ class MarkdownService
   end
 
   def render_html
-    input && html_renderer.render(input)
+    input && html_renderer.render(input).strip
   end
 
   def render_text
-    input && text_renderer.render(input)
+    input && text_renderer.render(input).strip
   end
 
 private

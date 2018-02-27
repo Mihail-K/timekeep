@@ -165,6 +165,7 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    redcarpet (3.4.0)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
@@ -261,6 +262,7 @@ DEPENDENCIES
   rails
   rails-controller-testing
   rails_12factor
+  redcarpet
   rspec-rails
   rubocop
   sass-rails

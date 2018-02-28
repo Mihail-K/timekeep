@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class EventsController < ApplicationController
-  before_action :set_user, only: :index
-  before_action :set_date, only: :index
+  before_action :set_user, :set_date, only: :index
   before_action :set_event, only: %i[edit update close destroy]
 
   def index

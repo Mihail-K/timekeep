@@ -23,7 +23,7 @@ private
   end
 
   def html_renderer
-    @html_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, options)
+    @html_renderer ||= Redcarpet::Markdown.new(HashTagHighlighter, options)
   end
 
   def text_renderer

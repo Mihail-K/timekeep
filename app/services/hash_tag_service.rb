@@ -2,34 +2,32 @@
 class HashTagService
   HASH_TAG_FORMAT = /#[\w\-]+/
 
-  attr_reader :input
   attr_reader :author
+  attr_reader :input
 
-  def initialize(input, author = nil)
-    @input  = input
+  def initialize(author, input)
     @author = author
+    @input  = input
+    @cache  = {}
+  end
+
+  def fragments
+    @fragments ||= input.scan(HASH_TAG_FORMAT).map { |fragment| fragment[1..-1].downcase }.reject(&:blank?).uniq
   end
 
   def hash_tags
-    hash_tag_positions.values
+    @hash_tags ||= fragments.map { |fragment| hash_tag(fragment) }
   end
 
-  def hash_tag_positions
-    @hash_tag_positions ||= fragments
-      .map { |position, fragment| [position, hash_tag_from_fragment(fragment)] }
-      .reject { |_, hash_tag| hash_tag.nil? }.to_h
+  def hash_tag(fragment)
+    @cache[fragment] ||= hash_tag_for_fragment(fragment)
   end
 
 private
 
-  def fragments
-    input.enum_for(:scan, HASH_TAG_FORMAT).map do |fragment|
-      [Regexp.last_match.begin(0), fragment[1..-1]]
-    end.to_h
-  end
-
-  def hash_tag_from_fragment(fragment)
-    hash_tag = HashTag.find_or_create_by(name: fragment) { |tag| tag.author = author }
-    hash_tag.persisted? ? hash_tag : nil
+  def hash_tag_for_fragment(fragment)
+    HashTag.find_or_create_by!(name: fragment) { |tag| tag.author = author }
+  rescue ActiveRecord::RecordInvalid
+    nil
   end
 end

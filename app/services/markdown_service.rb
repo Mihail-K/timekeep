@@ -32,11 +32,12 @@ class MarkdownService
 private
 
   def html_renderer
-    @html_renderer ||= Redcarpet::Markdown.new(HashTagHighlighter, options)
+    renderer_options = RENDERER_OPTIONS.merge(options)
+    @html_renderer ||= Redcarpet::Markdown.new(HashTagHighlighter.new(renderer_options), MARKDOWN_OPTIONS)
   end
 
   def text_renderer
     require 'redcarpet/render_strip'
-    @text_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown, options)
+    @text_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown, MARKDOWN_OPTIONS)
   end
 end

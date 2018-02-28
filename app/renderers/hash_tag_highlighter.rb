@@ -1,11 +1,22 @@
 # frozen_string_literal: true
 class HashTagHighlighter < Redcarpet::Render::HTML
-  def normal_text(text)
-    HashTagService.new(text).hash_tag_positions.reverse_each do |position, hash_tag|
-      text[position..position + hash_tag.name.length] = <<-HTML.strip
-        <a class="hash-tag" data-id="#{hash_tag.id}">#{text[position..position + hash_tag.name.length]}</a>
+  def initialize(hash_tags: nil, **options)
+    @hash_tags = hash_tags || []
+    super(**options)
+  end
+
+  def postprocess(text)
+    each_hash_tag do |hash_tag|
+      text = text.gsub(/(##{hash_tag.name})/i, <<-HTML.strip)
+        <a class="hash-tag" data-id="#{hash_tag.id}">\\1</a>
       HTML
     end
     text
+  end
+
+private
+
+  def each_hash_tag(&block)
+    @hash_tags.sort_by { |hash_tag| -hash_tag.name.length }.each(&block)
   end
 end

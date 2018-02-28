@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 class MarkdownService
-  DEFAULT_OPTIONS = {
-    autolink:            true,
+  MARKDOWN_OPTIONS = {
+    autolink:          true,
+    no_intra_emphasis: true
+  }.freeze
+
+  RENDERER_OPTIONS = {
+    hard_wrap:           true,
     escape_html:         true,
-    no_intra_emphasis:   true,
     prettify:            true,
     safe_links_only:     true,
     space_after_headers: true
@@ -14,7 +18,7 @@ class MarkdownService
 
   def initialize(input, **options)
     @input   = input
-    @options = DEFAULT_OPTIONS.merge(options)
+    @options = options
   end
 
   def render_html

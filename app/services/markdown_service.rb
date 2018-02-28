@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 class MarkdownService
   MARKDOWN_OPTIONS = {
-    autolink:          true,
-    no_intra_emphasis: true
+    autolink:            true,
+    no_intra_emphasis:   true,
+    space_after_headers: true
   }.freeze
 
   RENDERER_OPTIONS = {
-    hard_wrap:           true,
-    escape_html:         true,
-    prettify:            true,
-    safe_links_only:     true,
-    space_after_headers: true
+    hard_wrap:       true,
+    escape_html:     true,
+    prettify:        true,
+    safe_links_only: true
   }.freeze
 
   attr_reader :input

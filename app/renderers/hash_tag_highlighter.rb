@@ -8,7 +8,7 @@ class HashTagHighlighter < Redcarpet::Render::HTML
   def postprocess(text)
     each_hash_tag do |hash_tag|
       text = text.gsub(/(##{hash_tag.name})/i, <<-HTML.strip)
-        <a class="hash-tag" data-id="#{hash_tag.id}">\\1</a>
+        <span class="hash-tag" data-id="#{hash_tag.id}">\\1</span>
       HTML
     end
     text

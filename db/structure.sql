@@ -68,6 +68,19 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: event_hash_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE event_hash_tags (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    event_id uuid NOT NULL,
+    hash_tag_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: events; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -148,6 +161,14 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
+-- Name: event_hash_tags event_hash_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY event_hash_tags
+    ADD CONSTRAINT event_hash_tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -185,6 +206,27 @@ ALTER TABLE ONLY sessions
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_event_hash_tags_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_hash_tags_on_event_id ON event_hash_tags USING btree (event_id);
+
+
+--
+-- Name: index_event_hash_tags_on_event_id_and_hash_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_event_hash_tags_on_event_id_and_hash_tag_id ON event_hash_tags USING btree (event_id, hash_tag_id);
+
+
+--
+-- Name: index_event_hash_tags_on_hash_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_hash_tags_on_hash_tag_id ON event_hash_tags USING btree (hash_tag_id);
 
 
 --
@@ -261,6 +303,22 @@ ALTER TABLE ONLY hash_tags
 
 
 --
+-- Name: event_hash_tags fk_rails_dcba6b784c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY event_hash_tags
+    ADD CONSTRAINT fk_rails_dcba6b784c FOREIGN KEY (event_id) REFERENCES events(id);
+
+
+--
+-- Name: event_hash_tags fk_rails_e53f857df1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY event_hash_tags
+    ADD CONSTRAINT fk_rails_e53f857df1 FOREIGN KEY (hash_tag_id) REFERENCES hash_tags(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -275,6 +333,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180224022708'),
 ('20180224050623'),
 ('20180227211752'),
-('20180228014043');
+('20180228014043'),
+('20180228015916');
 
 

@@ -33,6 +33,9 @@ class Event < ApplicationRecord
 
   belongs_to :user
 
+  has_many :event_hash_tags, inverse_of: :event, dependent: :destroy
+  has_many :hash_tags, through: :event_hash_tags
+
   validates :date, presence: true, timeliness: { date: true }
   validates :start_time, presence: true, timeliness: { time: true }
   validates :end_time, timeliness: { allow_blank: true, time: true, on_or_after: :start_time, if: :start_time? }
@@ -41,7 +44,8 @@ class Event < ApplicationRecord
   before_save :set_duration, if: -> { start_time_changed? || end_time_changed? }
   before_save :set_html_and_text_descriptions, if: :description_changed?
 
-  after_create :set_end_time_on_previous_event, if: :ends_previous?
+  after_save :set_end_time_on_previous_event, on: :create, if: :ends_previous?
+  after_save :set_hash_tags_from_description, if: :saved_change_to_description?
 
   def self.longest_duration(limit: nil)
     where.not(duration: nil).order(duration: :desc).limit(limit).pluck(:text_description, :duration).to_h
@@ -70,5 +74,9 @@ private
     Event.where(user: user, date: date, end_time: [nil, ''])
       .where(Event.arel_table[:start_time].lt(start_time))
       .order(start_time: :desc).first
+  end
+
+  def set_hash_tags_from_description
+    self.hash_tags = HashTagService.new(description, user).hash_tags
   end
 end

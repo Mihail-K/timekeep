@@ -42,10 +42,10 @@ class Event < ApplicationRecord
   validates :description, length: { maximum: 1000 }, presence: true
 
   before_save :set_duration, if: -> { start_time_changed? || end_time_changed? }
+  before_save :set_hash_tags_from_description, if: :description_changed?
   before_save :set_html_and_text_descriptions, if: :description_changed?
 
-  after_save :set_end_time_on_previous_event, on: :create, if: :ends_previous?
-  after_save :set_hash_tags_from_description, if: :saved_change_to_description?
+  after_create :set_end_time_on_previous_event, if: :ends_previous?
 
   def self.longest_duration(limit: nil)
     where.not(duration: nil).order(duration: :desc).limit(limit).pluck(:text_description, :duration).to_h
@@ -60,8 +60,12 @@ private
     self.duration = (finish - start) / 1.minute
   end
 
+  def set_hash_tags_from_description
+    self.hash_tags = HashTagService.new(user, description).hash_tags
+  end
+
   def set_html_and_text_descriptions
-    markdown = MarkdownService.new(description)
+    markdown = MarkdownService.new(description, hash_tags: hash_tags)
     self.html_description = markdown.render_html
     self.text_description = markdown.render_text
   end
@@ -74,9 +78,5 @@ private
     Event.where(user: user, date: date, end_time: [nil, ''])
       .where(Event.arel_table[:start_time].lt(start_time))
       .order(start_time: :desc).first
-  end
-
-  def set_hash_tags_from_description
-    self.hash_tags = HashTagService.new(description, user).hash_tags
   end
 end

@@ -102,4 +102,16 @@ RSpec.describe Event, type: :model do
     previous = create(:event, user: subject.user, date: subject.date, start_time: '11:00')
     expect { subject.save }.to change { previous.reload.end_time }.to(subject.start_time)
   end
+
+  describe '.hash_tags' do
+    let(:hash_tags) { create_list(:hash_tag, 3) }
+
+    it 'uses the hash-tag service to assign hash-tags based on the description' do
+      hash_tag_double = double('HashTagService')
+      expect(HashTagService).to receive(:new).with(subject.user, subject.description).and_return(hash_tag_double)
+      expect(hash_tag_double).to receive(:hash_tags).and_return(hash_tags)
+
+      expect { subject.save }.to change { subject.hash_tags.to_a }.to(hash_tags)
+    end
+  end
 end

@@ -1,11 +1,20 @@
 # frozen_string_literal: true
 class MarkdownService
+  DEFAULT_OPTIONS = {
+    autolink:            true,
+    escape_html:         true,
+    no_intra_emphasis:   true,
+    prettify:            true,
+    safe_links_only:     true,
+    space_after_headers: true
+  }.freeze
+
   attr_reader :input
   attr_reader :options
 
   def initialize(input, **options)
     @input   = input
-    @options = default_options.merge(options)
+    @options = DEFAULT_OPTIONS.merge(options)
   end
 
   def render_html
@@ -17,10 +26,6 @@ class MarkdownService
   end
 
 private
-
-  def default_options
-    { filter_html: true }
-  end
 
   def html_renderer
     @html_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, options)

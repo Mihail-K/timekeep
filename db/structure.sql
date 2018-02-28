@@ -68,20 +68,6 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
--- Name: event_tags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE event_tags (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    event_id uuid NOT NULL,
-    tag_id uuid NOT NULL,
-    source character varying DEFAULT 'user_created'::character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: events; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -126,21 +112,6 @@ CREATE TABLE sessions (
 
 
 --
--- Name: tags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE tags (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid,
-    name citext NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
-);
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -161,14 +132,6 @@ CREATE TABLE users (
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
-
-
---
--- Name: event_tags event_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY event_tags
-    ADD CONSTRAINT event_tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -196,40 +159,11 @@ ALTER TABLE ONLY sessions
 
 
 --
--- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY tags
-    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
-
-
---
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: index_event_tags_on_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_tags_on_event_id ON event_tags USING btree (event_id);
-
-
---
--- Name: index_event_tags_on_event_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_event_tags_on_event_id_and_tag_id ON event_tags USING btree (event_id, tag_id);
-
-
---
--- Name: index_event_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_tags_on_tag_id ON event_tags USING btree (tag_id);
 
 
 --
@@ -261,27 +195,6 @@ CREATE INDEX index_sessions_on_user_id ON sessions USING btree (user_id);
 
 
 --
--- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_tags_on_name ON tags USING btree (name);
-
-
---
--- Name: index_tags_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_tags_on_user_id ON tags USING btree (user_id);
-
-
---
--- Name: index_tags_on_user_id_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_tags_on_user_id_and_name ON tags USING btree (user_id, name) WHERE (NOT deleted);
-
-
---
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -297,35 +210,11 @@ ALTER TABLE ONLY events
 
 
 --
--- Name: event_tags fk_rails_2692903801; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY event_tags
-    ADD CONSTRAINT fk_rails_2692903801 FOREIGN KEY (event_id) REFERENCES events(id);
-
-
---
 -- Name: sessions fk_rails_758836b4f0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sessions
     ADD CONSTRAINT fk_rails_758836b4f0 FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
--- Name: event_tags fk_rails_a640508117; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY event_tags
-    ADD CONSTRAINT fk_rails_a640508117 FOREIGN KEY (tag_id) REFERENCES tags(id);
-
-
---
--- Name: tags fk_rails_e689f6d0cc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY tags
-    ADD CONSTRAINT fk_rails_e689f6d0cc FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -342,8 +231,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180224021819'),
 ('20180224022708'),
 ('20180224050623'),
-('20180224181208'),
-('20180224181722'),
 ('20180227211752');
 
 

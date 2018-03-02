@@ -50,5 +50,9 @@ Rails:
 Style/ClassAndModuleChildren:
   Enabled: false
 
+Style/ConditionalAssignment:
+  EnforcedStyle: assign_inside_condition
+  IncludeTernaryExpressions: false
+
 Style/Documentation:
   Enabled: false

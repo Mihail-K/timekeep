@@ -1,48 +1,13 @@
-<div class="row">
-  <%= form_tag(nil, method: 'GET', class: 'form-inline col mt-2') do %>
-    <div class="input-group mb-2 mr-sm-2">
-      <div class="input-group-prepend">
-        <span class="input-group-text small pt-0 pb-0">
-          <i class="material-icons md-18">date_range</i>
-        </span>
-      </div>
-      <%= date_field_tag(:date, @date, class: 'form-control') %>
-    </div>
-    <%= submit_tag('Filter', class: 'btn btn-outline-secondary mb-2') %>
-  <% end %>
-</div>
-<div class="row">
-  <table class="table table-striped">
-    <tr>
-      <th>Date</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      <th>Description</th>
-      <th></th>
-    </tr>
-    <% @events.each do |event| %>
-      <tr id="event-<%= event.id %>">
-        <td><%= l(event.date, format: :long) %></td>
-        <td><%= l(event.start_time.to_time, format: :time) %></td>
-        <td><%= event.end_time.presence && l(event.end_time.to_time, format: :time) %></td>
-        <td><%= raw(event.html_description) %></td>
-        <td class="text-right">
-          <% if event.end_time.blank? && policy(event).close? %>
-            <%= link_to('Close', close_event_url(event, page: @events.current_page), class: 'btn btn-sm btn-link', method: 'PATCH') %>
-          <% end %>
-          <% if policy(event).update? %>
-            <%= link_to('Edit', edit_event_url(event, page: @events.current_page), class: 'btn btn-sm btn-link') %>
-          <% end %>
-          <% if policy(event).destroy? %>
-            <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</div>
-<div class="row justify-content-center">
-  <div class="col-sm-auto">
-    <%= paginate(@events, theme: 'twitter-bootstrap-4') %>
+<% cache([@user, @date]) do %>
+  <div class="row">
+    <%= render('filters') %>
   </div>
-</div>
+  <div class="row">
+    <%= render('table') %>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-sm-auto">
+      <%= paginate(@events, theme: 'twitter-bootstrap-4') %>
+    </div>
+  </div>
+<% end %>

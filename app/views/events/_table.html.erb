@@ -1,0 +1,28 @@
+<table class="table table-striped">
+  <tr>
+    <th>Date</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th>Description</th>
+    <th></th>
+  </tr>
+  <% @events.each do |event| %>
+    <tr id="event-<%= event.id %>">
+      <td><%= l(event.date, format: :long) %></td>
+      <td><%= l(event.start_time.to_time, format: :time) %></td>
+      <td><%= event.end_time.presence && l(event.end_time.to_time, format: :time) %></td>
+      <td><%= raw(event.html_description) %></td>
+      <td class="text-right">
+        <% if event.end_time.blank? && policy(event).close? %>
+          <%= link_to('Close', close_event_url(event, page: @events.current_page), class: 'btn btn-sm btn-link', method: 'PATCH') %>
+        <% end %>
+        <% if policy(event).update? %>
+          <%= link_to('Edit', edit_event_url(event, page: @events.current_page), class: 'btn btn-sm btn-link') %>
+        <% end %>
+        <% if policy(event).destroy? %>
+          <%= link_to('Delete', event_url(event), class: 'btn btn-sm btn-link', method: 'DELETE') %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

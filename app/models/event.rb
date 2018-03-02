@@ -31,7 +31,7 @@ class Event < ApplicationRecord
 
   attribute :ends_previous, :boolean
 
-  belongs_to :user
+  belongs_to :user, touch: true
 
   has_many :event_hash_tags, inverse_of: :event, dependent: :destroy
   has_many :hash_tags, through: :event_hash_tags

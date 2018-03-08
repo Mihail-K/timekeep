@@ -7,6 +7,7 @@ class EventsController < ApplicationController
     @events = policy_scope(Event).includes(:user).where(date: @date, user: @user)
     @events = @events.order({ date: :desc, start_time: :desc }, 'events.end_time DESC NULLS LAST')
     @events = @events.page(params[:page]).per(params[:count])
+    fresh_when(@articles)
   end
 
   def new
@@ -29,6 +30,7 @@ class EventsController < ApplicationController
   def edit
     authorize(@event)
     @page = params[:page].presence
+    fresh_when(@event)
   end
 
   def update

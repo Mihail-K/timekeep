@@ -3,8 +3,8 @@ module HashTaggable
   extend ActiveSupport::Concern
 
   included do
-    has_many :event_hash_tags, inverse_of: :event, dependent: :destroy
-    has_many :hash_tags, through: :event_hash_tags
+    has_many :object_hash_tags, as: :hash_taggable, inverse_of: :hash_taggable, dependent: :destroy
+    has_many :hash_tags, through: :object_hash_tags
   end
 
   class_methods do

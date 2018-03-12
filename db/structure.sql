@@ -68,19 +68,6 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
--- Name: event_hash_tags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE event_hash_tags (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    event_id uuid NOT NULL,
-    hash_tag_id uuid NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: events; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -115,6 +102,20 @@ CREATE TABLE hash_tags (
 
 
 --
+-- Name: object_hash_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE object_hash_tags (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    hash_tag_id uuid NOT NULL,
+    hash_taggable_type character varying NOT NULL,
+    hash_taggable_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -134,6 +135,34 @@ CREATE TABLE sessions (
     expires_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: team_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE team_users (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    team_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: teams; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE teams (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    creator_id uuid NOT NULL,
+    name character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    deleted_at timestamp without time zone
 );
 
 
@@ -161,14 +190,6 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
--- Name: event_hash_tags event_hash_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY event_hash_tags
-    ADD CONSTRAINT event_hash_tags_pkey PRIMARY KEY (id);
-
-
---
 -- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -182,6 +203,14 @@ ALTER TABLE ONLY events
 
 ALTER TABLE ONLY hash_tags
     ADD CONSTRAINT hash_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: object_hash_tags object_hash_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY object_hash_tags
+    ADD CONSTRAINT object_hash_tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -201,32 +230,27 @@ ALTER TABLE ONLY sessions
 
 
 --
+-- Name: team_users team_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY team_users
+    ADD CONSTRAINT team_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY teams
+    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: index_event_hash_tags_on_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_hash_tags_on_event_id ON event_hash_tags USING btree (event_id);
-
-
---
--- Name: index_event_hash_tags_on_event_id_and_hash_tag_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_event_hash_tags_on_event_id_and_hash_tag_id ON event_hash_tags USING btree (event_id, hash_tag_id);
-
-
---
--- Name: index_event_hash_tags_on_hash_tag_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_hash_tags_on_hash_tag_id ON event_hash_tags USING btree (hash_tag_id);
 
 
 --
@@ -251,6 +275,27 @@ CREATE UNIQUE INDEX index_hash_tags_on_name ON hash_tags USING btree (name);
 
 
 --
+-- Name: index_object_hash_tags_on_hash_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_object_hash_tags_on_hash_tag_id ON object_hash_tags USING btree (hash_tag_id);
+
+
+--
+-- Name: index_object_hash_tags_on_hash_tag_id_and_hash_taggable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_object_hash_tags_on_hash_tag_id_and_hash_taggable ON object_hash_tags USING btree (hash_tag_id, hash_taggable_type, hash_taggable_id);
+
+
+--
+-- Name: index_object_hash_tags_on_hash_taggable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_object_hash_tags_on_hash_taggable ON object_hash_tags USING btree (hash_taggable_type, hash_taggable_id);
+
+
+--
 -- Name: index_sessions_on_expires_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -272,6 +317,34 @@ CREATE INDEX index_sessions_on_user_id ON sessions USING btree (user_id);
 
 
 --
+-- Name: index_team_users_on_team_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_team_users_on_team_id ON team_users USING btree (team_id);
+
+
+--
+-- Name: index_team_users_on_team_id_and_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_team_users_on_team_id_and_user_id ON team_users USING btree (team_id, user_id);
+
+
+--
+-- Name: index_team_users_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_team_users_on_user_id ON team_users USING btree (user_id);
+
+
+--
+-- Name: index_teams_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_teams_on_creator_id ON teams USING btree (creator_id);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -284,6 +357,14 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 ALTER TABLE ONLY events
     ADD CONSTRAINT fk_rails_0cb5590091 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: team_users fk_rails_6a8dc6a6fc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY team_users
+    ADD CONSTRAINT fk_rails_6a8dc6a6fc FOREIGN KEY (team_id) REFERENCES teams(id);
 
 
 --
@@ -303,19 +384,27 @@ ALTER TABLE ONLY hash_tags
 
 
 --
--- Name: event_hash_tags fk_rails_dcba6b784c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: object_hash_tags fk_rails_7bc2da32d5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY event_hash_tags
-    ADD CONSTRAINT fk_rails_dcba6b784c FOREIGN KEY (event_id) REFERENCES events(id);
+ALTER TABLE ONLY object_hash_tags
+    ADD CONSTRAINT fk_rails_7bc2da32d5 FOREIGN KEY (hash_tag_id) REFERENCES hash_tags(id);
 
 
 --
--- Name: event_hash_tags fk_rails_e53f857df1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: teams fk_rails_7ecf94116f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY event_hash_tags
-    ADD CONSTRAINT fk_rails_e53f857df1 FOREIGN KEY (hash_tag_id) REFERENCES hash_tags(id);
+ALTER TABLE ONLY teams
+    ADD CONSTRAINT fk_rails_7ecf94116f FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: team_users fk_rails_8b0a3daf0d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY team_users
+    ADD CONSTRAINT fk_rails_8b0a3daf0d FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -334,6 +423,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180224050623'),
 ('20180227211752'),
 ('20180228014043'),
-('20180228015916');
+('20180228015916'),
+('20180301165744'),
+('20180301171453'),
+('20180312231254'),
+('20180312231602'),
+('20180312231820');
 
 

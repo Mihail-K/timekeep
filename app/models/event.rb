@@ -27,22 +27,21 @@
 #
 
 class Event < ApplicationRecord
+  include HashTaggable
   include SoftDeletable
 
   attribute :ends_previous, :boolean
 
   belongs_to :user, touch: true
 
-  has_many :event_hash_tags, inverse_of: :event, dependent: :destroy
-  has_many :hash_tags, through: :event_hash_tags
-
   validates :date, presence: true, timeliness: { date: true }
   validates :start_time, presence: true, timeliness: { time: true }
   validates :end_time, timeliness: { allow_blank: true, time: true, on_or_after: :start_time, if: :start_time? }
   validates :description, length: { maximum: 1000 }, presence: true
 
+  creates_hash_tags_from :description
+
   before_save :set_duration, if: -> { start_time_changed? || end_time_changed? }
-  before_save :set_hash_tags_from_description, if: :description_changed?
   before_save :set_html_and_text_descriptions, if: :description_changed?
 
   after_create :set_end_time_on_previous_event, if: :ends_previous?

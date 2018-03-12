@@ -28,7 +28,7 @@
 
 class Event < ApplicationRecord
   include HashTaggable
-  include Markdownable
+  include MarkdownRenderable
   include SoftDeletable
 
   attribute :ends_previous, :boolean

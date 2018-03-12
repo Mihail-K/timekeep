@@ -28,6 +28,7 @@
 
 class Event < ApplicationRecord
   include HashTaggable
+  include Markdownable
   include SoftDeletable
 
   attribute :ends_previous, :boolean
@@ -40,9 +41,9 @@ class Event < ApplicationRecord
   validates :description, length: { maximum: 1000 }, presence: true
 
   creates_hash_tags_from :description
+  renders_markdown_from :description
 
   before_save :set_duration, if: -> { start_time_changed? || end_time_changed? }
-  before_save :set_html_and_text_descriptions, if: :description_changed?
 
   after_create :set_end_time_on_previous_event, if: :ends_previous?
 
@@ -57,12 +58,6 @@ private
     start  = Time.zone.parse("#{date} #{start_time}")
     finish = Time.zone.parse("#{date} #{end_time}")
     self.duration = (finish - start) / 1.minute
-  end
-
-  def set_html_and_text_descriptions
-    markdown = MarkdownService.new(description, hash_tags: hash_tags)
-    self.html_description = markdown.render_html
-    self.text_description = markdown.render_text
   end
 
   def set_end_time_on_previous_event

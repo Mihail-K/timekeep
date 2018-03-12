@@ -59,10 +59,6 @@ private
     self.duration = (finish - start) / 1.minute
   end
 
-  def set_hash_tags_from_description
-    self.hash_tags = HashTagService.new(user, description).hash_tags
-  end
-
   def set_html_and_text_descriptions
     markdown = MarkdownService.new(description, hash_tags: hash_tags)
     self.html_description = markdown.render_html

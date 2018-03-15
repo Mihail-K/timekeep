@@ -38,4 +38,14 @@ class Reminder < ApplicationRecord
 
   creates_hash_tags_from :description
   renders_markdown_from :description
+
+  after_commit :enqueue_reminder_job, if: -> { saved_change_to_date? || saved_change_to_time? }
+
+  def datetime
+    ActiveSupport::TimeZone[user.time_zone].parse("#{date} #{time}")
+  end
+
+  def enqueue_reminder_job
+    ReminderJob.set(wait_until: datetime).perform_later(self)
+  end
 end

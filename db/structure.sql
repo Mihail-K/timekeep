@@ -116,6 +116,25 @@ CREATE TABLE object_hash_tags (
 
 
 --
+-- Name: reminders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE reminders (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    user_id uuid NOT NULL,
+    date date NOT NULL,
+    "time" character varying NOT NULL,
+    description text NOT NULL,
+    html_description text NOT NULL,
+    text_description text NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    deleted_at timestamp without time zone
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -214,6 +233,14 @@ ALTER TABLE ONLY object_hash_tags
 
 
 --
+-- Name: reminders reminders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reminders
+    ADD CONSTRAINT reminders_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -296,6 +323,13 @@ CREATE INDEX index_object_hash_tags_on_hash_taggable ON object_hash_tags USING b
 
 
 --
+-- Name: index_reminders_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_reminders_on_user_id ON reminders USING btree (user_id);
+
+
+--
 -- Name: index_sessions_on_expires_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -357,6 +391,14 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 ALTER TABLE ONLY events
     ADD CONSTRAINT fk_rails_0cb5590091 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: reminders fk_rails_49f81d5e52; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reminders
+    ADD CONSTRAINT fk_rails_49f81d5e52 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -428,6 +470,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180301171453'),
 ('20180312231254'),
 ('20180312231602'),
-('20180312231820');
+('20180312231820'),
+('20180314183608');
 
 

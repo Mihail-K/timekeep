@@ -4,7 +4,7 @@ module ApplicationCable
     identified_by :current_user
 
     def connect
-      self.current_user = current_session&.user
+      self.current_user = current_session&.user || reject_unauthorized_connection
     end
 
   private

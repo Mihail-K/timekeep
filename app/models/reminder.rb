@@ -48,4 +48,9 @@ class Reminder < ApplicationRecord
   def enqueue_reminder_job
     ReminderJob.set(wait_until: datetime).perform_later(self)
   end
+
+  def serializable_hash(options = {})
+    options[:only] = %i[id date time description html_description text_description]
+    super
+  end
 end

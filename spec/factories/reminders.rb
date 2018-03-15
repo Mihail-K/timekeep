@@ -10,6 +10,8 @@
 #  description      :text             not null
 #  html_description :text             not null
 #  text_description :text             not null
+#  delivered        :boolean          default(FALSE), not null
+#  delivered_at     :datetime
 #  deleted          :boolean          default(FALSE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -28,7 +30,7 @@ FactoryBot.define do
   factory :reminder do
     association :user, strategy: :build
 
-    date { Date.current }
+    date { Date.current.tomorrow }
     time '12:00'
     description { Faker::Hipster.sentence }
   end

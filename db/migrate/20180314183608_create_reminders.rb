@@ -8,6 +8,8 @@ class CreateReminders < ActiveRecord::Migration[5.1]
       t.text        :description, null: false
       t.text        :html_description, null: false
       t.text        :text_description, null: false
+      t.boolean     :delivered, null: false, default: false
+      t.timestamp   :delivered_at
       t.boolean     :deleted, null: false, default: false
       t.timestamps  null: false
       t.timestamp   :deleted_at

@@ -127,6 +127,8 @@ CREATE TABLE reminders (
     description text NOT NULL,
     html_description text NOT NULL,
     text_description text NOT NULL,
+    delivered boolean DEFAULT false NOT NULL,
+    delivered_at timestamp without time zone,
     deleted boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -168,7 +170,8 @@ CREATE TABLE users (
     first_name character varying,
     last_name character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    online boolean DEFAULT false NOT NULL
 );
 
 
@@ -373,6 +376,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180312231254'),
 ('20180312231602'),
 ('20180312231820'),
-('20180314183608');
+('20180314183608'),
+('20180315233323');
 
 

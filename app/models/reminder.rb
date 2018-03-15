@@ -10,6 +10,8 @@
 #  description      :text             not null
 #  html_description :text             not null
 #  text_description :text             not null
+#  delivered        :boolean          default(FALSE), not null
+#  delivered_at     :datetime
 #  deleted          :boolean          default(FALSE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -35,22 +37,25 @@ class Reminder < ApplicationRecord
   validates :description, length: { maximum: 1000 }
   validates :date, timeliness: { date: true }
   validates :time, timeliness: { time: true }
+  validates :datetime, timeliness: { after: :now }, on: :create
 
   creates_hash_tags_from :description
   renders_markdown_from :description
 
-  after_commit :enqueue_reminder_job, if: -> { saved_change_to_date? || saved_change_to_time? }
+  before_save :set_delivered_at, if: -> { delivered_changed?(to: true) }
 
   def datetime
     ActiveSupport::TimeZone[user.time_zone].parse("#{date} #{time}")
   end
 
-  def enqueue_reminder_job
-    ReminderJob.set(wait_until: datetime).perform_later(self)
-  end
-
   def serializable_hash(options = {})
     options[:only] = %i[id date time description html_description text_description]
     super
+  end
+
+private
+
+  def set_delivered_at
+    self.delivered_at = Time.current
   end
 end

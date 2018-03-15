@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     @session = Session.new(session_params)
 
     if @session.save
-      session[:token] = @session.token
+      cookies.encrypted[:session_token] = @session.token
       redirect_to user_events_url(@session.user)
     else
       render 'new'
@@ -19,6 +19,7 @@ class SessionsController < ApplicationController
 
   def destroy
     current_session.destroy
+    cookies.encrypted[:session_token] = nil
     redirect_to new_session_url
   end
 

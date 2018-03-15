@@ -33,6 +33,7 @@ RSpec.describe UsersController, type: :controller do
         post :create, params: { user: attributes_for(:user) }
 
         expect(response).to redirect_to(user_events_url(User.last))
+        expect(cookies.encrypted[:session_token]).to be_present
       end.to change { User.count }.by(1)
         .and change { Session.count }.by(1)
     end
@@ -42,6 +43,7 @@ RSpec.describe UsersController, type: :controller do
         post :create, params: { user: attributes_for(:user, email: '') }
 
         expect(response).to render_template('new')
+        expect(cookies.encrypted[:session_token]).to be_blank
       end.not_to change { User.count }
     end
   end

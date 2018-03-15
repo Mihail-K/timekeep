@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
     if @user.save
       @session = Session.create(user: @user)
-      session[:token] = @session.token
+      cookies.encrypted[:session_token] = @session.token
       redirect_to user_events_url(@user)
     else
       render 'new'

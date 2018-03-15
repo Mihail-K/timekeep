@@ -40,6 +40,7 @@ RSpec.describe SessionsController, type: :controller do
         post :create, params: { session: { email: user.email, password: user.password } }
 
         expect(response).to redirect_to(user_events_url(user))
+        expect(cookies.encrypted[:session_token]).to be_present
       end.to change { Session.count }.by(1)
     end
 
@@ -48,6 +49,7 @@ RSpec.describe SessionsController, type: :controller do
         post :create, params: { session: { email: user.email, password: 'wrong' } }
 
         expect(response).to render_template('new')
+        expect(cookies.encrypted[:session_token]).to be_blank
       end.not_to change { Session.count }
     end
   end
@@ -55,11 +57,16 @@ RSpec.describe SessionsController, type: :controller do
   describe '#DELETE destroy' do
     let!(:session) { create(:session) }
 
+    before(:each) do
+      cookies.encrypted[:session_token] = session.token
+    end
+
     it 'terminates the session and redirects to login' do
       expect do
-        delete :destroy, session: { token: session.token }
+        delete :destroy
 
         expect(response).to redirect_to(new_session_url)
+        expect(cookies.encrypted[:session_token]).to be_blank
       end.to change { Session.count }.by(-1)
     end
   end

@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def current_session
-    return @current_session if defined?(@current_session)
-    @current_session = Session.active.find_by(token: session[:token])
+    return @current_session if defined?(@current_session) || cookies.encrypted[:session_token].blank?
+    @current_session = Session.active.find_by(token: cookies.encrypted[:session_token])
   end
 
   def current_user

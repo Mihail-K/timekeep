@@ -26,13 +26,10 @@
 
 FactoryBot.define do
   factory :reminder do
-    user nil
-    date '2018-03-14'
-    time 'MyString'
-    description 'MyText'
-    html_description 'MyText'
-    text_description 'MyText'
-    deleted false
-    deleted_at '2018-03-14 14:36:08'
+    association :user, strategy: :build
+
+    date { Date.current }
+    time '12:00'
+    description { Faker::Hipster.sentence }
   end
 end

@@ -158,34 +158,6 @@ CREATE TABLE sessions (
 
 
 --
--- Name: team_users; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE team_users (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    team_id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: teams; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE teams (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    creator_id uuid NOT NULL,
-    name character varying NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
-);
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -254,22 +226,6 @@ ALTER TABLE ONLY schema_migrations
 
 ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
-
-
---
--- Name: team_users team_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY team_users
-    ADD CONSTRAINT team_users_pkey PRIMARY KEY (id);
-
-
---
--- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY teams
-    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
 
 
 --
@@ -351,34 +307,6 @@ CREATE INDEX index_sessions_on_user_id ON sessions USING btree (user_id);
 
 
 --
--- Name: index_team_users_on_team_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_team_users_on_team_id ON team_users USING btree (team_id);
-
-
---
--- Name: index_team_users_on_team_id_and_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_team_users_on_team_id_and_user_id ON team_users USING btree (team_id, user_id);
-
-
---
--- Name: index_team_users_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_team_users_on_user_id ON team_users USING btree (user_id);
-
-
---
--- Name: index_teams_on_creator_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_teams_on_creator_id ON teams USING btree (creator_id);
-
-
---
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -399,14 +327,6 @@ ALTER TABLE ONLY events
 
 ALTER TABLE ONLY reminders
     ADD CONSTRAINT fk_rails_49f81d5e52 FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
--- Name: team_users fk_rails_6a8dc6a6fc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY team_users
-    ADD CONSTRAINT fk_rails_6a8dc6a6fc FOREIGN KEY (team_id) REFERENCES teams(id);
 
 
 --
@@ -434,22 +354,6 @@ ALTER TABLE ONLY object_hash_tags
 
 
 --
--- Name: teams fk_rails_7ecf94116f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY teams
-    ADD CONSTRAINT fk_rails_7ecf94116f FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: team_users fk_rails_8b0a3daf0d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY team_users
-    ADD CONSTRAINT fk_rails_8b0a3daf0d FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
 -- PostgreSQL database dump complete
 --
 
@@ -466,8 +370,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180227211752'),
 ('20180228014043'),
 ('20180228015916'),
-('20180301165744'),
-('20180301171453'),
 ('20180312231254'),
 ('20180312231602'),
 ('20180312231820'),

@@ -27,5 +27,29 @@
 require 'rails_helper'
 
 RSpec.describe Reminder, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { build(:reminder) }
+
+  it 'has a valid factory' do
+    should be_valid
+  end
+
+  it 'is invalid without a date' do
+    subject.date = nil
+    should be_invalid
+  end
+
+  it 'is invalid without a time' do
+    subject.time = nil
+    should be_invalid
+  end
+
+  it 'is invalid without a description' do
+    subject.description = nil
+    should be_invalid
+  end
+
+  it 'is invalid when the description is longer than 1000 characters' do
+    subject.description = '1' * 1001
+    should be_invalid
+  end
 end

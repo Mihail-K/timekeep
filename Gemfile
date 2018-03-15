@@ -16,6 +16,7 @@ gem 'pundit', git: 'https://github.com/varvet/pundit.git'
 gem 'rails'
 gem 'redcarpet'
 gem 'redis-rails'
+gem 'resque'
 gem 'sass-rails'
 gem 'turbolinks'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

@@ -7,6 +7,7 @@
 #  user_id          :uuid             not null
 #  date             :date             not null
 #  time             :string           not null
+#  datetime         :datetime         not null
 #  description      :text             not null
 #  html_description :text             not null
 #  text_description :text             not null
@@ -19,7 +20,8 @@
 #
 # Indexes
 #
-#  index_reminders_on_user_id  (user_id)
+#  index_reminders_on_datetime  (datetime)
+#  index_reminders_on_user_id   (user_id)
 #
 # Foreign Keys
 #
@@ -42,11 +44,6 @@ RSpec.describe Reminder, type: :model do
 
   it 'is invalid without a time' do
     subject.time = nil
-    should be_invalid
-  end
-
-  it 'is invalid when the date and time are in the past' do
-    subject.date = Date.current.yesterday
     should be_invalid
   end
 

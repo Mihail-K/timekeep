@@ -124,6 +124,7 @@ CREATE TABLE reminders (
     user_id uuid NOT NULL,
     date date NOT NULL,
     "time" character varying NOT NULL,
+    datetime timestamp without time zone NOT NULL,
     description text NOT NULL,
     html_description text NOT NULL,
     text_description text NOT NULL,
@@ -279,6 +280,13 @@ CREATE UNIQUE INDEX index_object_hash_tags_on_hash_tag_id_and_hash_taggable ON o
 --
 
 CREATE INDEX index_object_hash_tags_on_hash_taggable ON object_hash_tags USING btree (hash_taggable_type, hash_taggable_id);
+
+
+--
+-- Name: index_reminders_on_datetime; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_reminders_on_datetime ON reminders USING btree (datetime);
 
 
 --

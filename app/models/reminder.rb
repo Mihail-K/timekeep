@@ -7,6 +7,7 @@
 #  user_id          :uuid             not null
 #  date             :date             not null
 #  time             :string           not null
+#  datetime         :datetime         not null
 #  description      :text             not null
 #  html_description :text             not null
 #  text_description :text             not null
@@ -19,7 +20,8 @@
 #
 # Indexes
 #
-#  index_reminders_on_user_id  (user_id)
+#  index_reminders_on_datetime  (datetime)
+#  index_reminders_on_user_id   (user_id)
 #
 # Foreign Keys
 #
@@ -37,16 +39,12 @@ class Reminder < ApplicationRecord
   validates :description, length: { maximum: 1000 }
   validates :date, timeliness: { date: true }
   validates :time, timeliness: { time: true }
-  validates :datetime, timeliness: { after: :now }, on: :create
 
   creates_hash_tags_from :description
   renders_markdown_from :description
 
+  before_save :set_datetime, if: -> { date_changed? || time_changed? }
   before_save :set_delivered_at, if: -> { delivered_changed?(to: true) }
-
-  def datetime
-    ActiveSupport::TimeZone[user.time_zone].parse("#{date} #{time}")
-  end
 
   def serializable_hash(options = {})
     options[:only] = %i[id date time description html_description text_description]
@@ -54,6 +52,10 @@ class Reminder < ApplicationRecord
   end
 
 private
+
+  def set_datetime
+    self.datetime = ActiveSupport::TimeZone[user.time_zone].parse("#{date} #{time}")
+  end
 
   def set_delivered_at
     self.delivered_at = Time.current

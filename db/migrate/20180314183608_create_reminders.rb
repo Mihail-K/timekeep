@@ -5,6 +5,7 @@ class CreateReminders < ActiveRecord::Migration[5.1]
       t.belongs_to  :user, foreign_key: true, null: false, type: :uuid
       t.date        :date, null: false
       t.string      :time, null: false
+      t.timestamp   :datetime, null: false, index: true
       t.text        :description, null: false
       t.text        :html_description, null: false
       t.text        :text_description, null: false
